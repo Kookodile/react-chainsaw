@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ReactChainsaw.API.Assembler;
+using ReactChainsaw.API.Database.Repositories;
 using ReactChainsaw.API.Transports;
+using ReactChainsaw.API.Transports.Requests;
 
 namespace ReactChainsaw.API.Controllers
 {
@@ -7,73 +10,40 @@ namespace ReactChainsaw.API.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
-        static List<ToDo> data = new List<ToDo>();
+
+        private readonly ToDoAssembler assembler;
+
+        public ToDoController(ToDoRepository repository)
+        {
+            this.assembler = new ToDoAssembler();
+            this.repository = repository;
+        }
+
+        private readonly ToDoRepository repository;
 
         [HttpGet]
         public List<ToDo> GetToDos()
         {
-
-            return data;
-
+            return assembler.Convert(repository.GetAll());
         }
 
         [HttpPost]
-        public void AddTodos(string nom, string description, DateTime deadline)
+        public void AddTodos(AddTodo request)
         {
-
-            ToDo todo1 = new ToDo
-            {
-                DateCreation = DateTime.Now,
-                DateModification = DateTime.Now,
-                DeadLine = deadline,
-                Description = description,
-                Eta = 0,
-                Id = Random.Shared.Next(),
-                Nom = nom
-            };
-            data.Add(todo1);
-
-
+            repository.Insert(request.Nom, request.Description, request.DeadLine);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public void DeleteTodos(int id)
         {
-            //data.Any((todo) => { return todo.Eta == 100; });
-
-            var toDelete = data.Find((todo) => todo.Id == id);
-
-            if (toDelete != null)
-            {
-                data.Remove(toDelete);
-            }
-            else
-            {
-                throw new Exception("Id inexistant");
-            }
+            repository.Delete(id);
         }
 
-        [HttpPut]
-        public ToDo EditTodo(int id, string nom, string description, int eta, DateTime deadline)
+        [HttpPut("{id}")]
+        public ToDo EditTodo(int id, EditTodo request)
         {
 
-
-            var update = data.Find((todo) => todo.Id == id);
-            if (update != null)
-            {
-                update.Nom = nom;
-                update.Description = description;
-                update.Eta = eta;
-                update.DeadLine = deadline;
-                update.DateModification = DateTime.Now;
-
-            } 
-            else
-            {
-                throw new Exception("Id inexistant");
-            }
-
-            return update;
+            return assembler.Convert(repository.Update(id, request.Nom, request.Description, request.DeadLine, request.Eta));
         }
     }
 }

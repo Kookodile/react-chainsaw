@@ -1,6 +1,6 @@
-﻿namespace ReactChainsaw.API.Transports
+﻿namespace ReactChainsaw.API.Database.Models
 {
-    public class ToDo
+    public class ToDoEntity
     {
         public int Id { get; set; }
 
