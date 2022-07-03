@@ -1,0 +1,52 @@
+liste de site webs
+
+chaque sites a :
+    Un ID PK
+    un nom UNIQUE
+    une adresse UNIQUE
+    date de création
+    date de modification
+
+ relié à un repo gitHub :
+        nom repo
+        user
+
+*********************************
+
+Recuperer repo
+afficher repo + sites
+
+
+
+y accèder
+    CRUD:site
+        créer un site
+        supprimer site
+        modifier site
+        rencenser site
+
+    CRUD:login
+        inscription
+        connexion
+        deconnexion
+        suppression de compte
+        modification (-mdp , -username)
+        verif de connexion
+
+
+    CRUD:git
+        créer repo
+        lire repo
+        supprimer repo
+
+    CRUD:todolist
+        créer une tache
+        suivre son avancement
+        supprimer une tache
+        éditer une tache
+
+
+me conctacter
+
+
+todo list
